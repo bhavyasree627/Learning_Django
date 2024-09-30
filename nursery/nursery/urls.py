@@ -20,5 +20,7 @@ from eco.views import *
 
 urlpatterns = [
     path('',home,name="home"),
+    path('contact/',contact, name="contact"),
+    path('nursery/',nursery,name="nursery"),
     path('admin/', admin.site.urls),
 ]

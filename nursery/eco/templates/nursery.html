@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block start %}
+    <h1> This is a nursery page </h1>
+    <h3>{{plants}}</h3>
+    <table class="table table-striped">
+    <thead>
+        <tr>
+        <th scope="col">S.no</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for plant in plants %}
+        {% if plant.price < 100 %}
+        <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{plant.name}}</td>
+        <td>{{plant.price}}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}` `

@@ -12,19 +12,16 @@ def home(request):
     return render(request, 'home.html',context={"plants":plants,"msg":message})
 
 
+def contact(request):
+    return render(request, 'contact.html')
 
+def nursery(request):
+    plants=[
+        {'name':'Rose', 'price': 100},
+        {'name':'Lily', 'price': 99},
+        {'name':'Crysanthemum', 'price': 65},
+        {'name':'Tulip', 'price': 100},
+    ]
+    return render(request,'nursery.html', context={"plants":plants})
 
-
-
-
-
-
-    # return HttpResponse(
-    #     """
-    #     <h1> Hello Welcome to Nursery</h1>
-    #     <h5> See all the available species</h5>
-    #     <p>Select your likes from below</p>
-    #      """
-    # )
-    
 
