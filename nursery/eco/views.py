@@ -21,6 +21,7 @@ def nursery(request):
         {'name':'Lily', 'price': 99},
         {'name':'Crysanthemum', 'price': 65},
         {'name':'Tulip', 'price': 100},
+        {'name':'Jasmine','price':45}
     ]
     return render(request,'nursery.html', context={"plants":plants})
 
