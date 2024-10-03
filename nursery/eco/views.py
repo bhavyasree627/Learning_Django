@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse
 from .models import *
 from django.contrib import messages 
@@ -14,7 +14,6 @@ def home(request):
     message = "Wonder world of Green"
     return render(request, 'home.html',context={"plants":plants,"msg":message})
 
-
 def contact(request):
     return render(request, 'contact.html')
 
@@ -27,6 +26,8 @@ def nursery(request):
         {'name':'Jasmine','price':45}
     ]
     return render(request,'nursery.html', context={"plants":plants})
+
+
 
 def add_plant(request):
     if request.method == "POST":
@@ -52,3 +53,33 @@ def add_plant(request):
         messages.success(request, "Plant added successfully!")
 
     return render(request, 'add_plant.html')
+
+
+def all_plants(request):
+    plants = Plant.objects.all()
+    return render(request, 'all_plants.html', {'plants': plants})
+
+def delete_plant(request, plant_id):
+    plant = get_object_or_404(Plant, id=plant_id)
+    plant.delete()
+    messages.success(request, "Plant deleted successfully!")
+    return redirect('all_plants')
+
+
+def update_plant(request, plant_id):
+    plant = get_object_or_404(Plant, id=plant_id)
+
+    if request.method == "POST":
+        data = request.POST
+        plant.plant_name = data.get('plant_name')
+        plant.scientific_name = data.get('scientific_name')
+        plant.price = int(data.get('price'))
+        plant.age = int(data.get('age'))
+        plant.pic = request.FILES.get('pic') if request.FILES.get('pic') else plant.pic
+        plant.imported = data.get('imported') == 'on'
+        plant.save()
+
+        messages.success(request, "Plant updated successfully!")
+        return redirect('all_plants')
+
+    return render(request, 'update_plant.html', {'plant': plant})

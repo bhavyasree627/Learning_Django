@@ -24,4 +24,7 @@ urlpatterns = [
     path('nursery/',nursery,name="nursery"),
     path('admin/', admin.site.urls),
     path('plants/add/', add_plant, name='add_plant'),
+    path('all/plants/',all_plants, name = "all_plants"),
+     path('plants/update/<int:plant_id>/',update_plant, name='update_plant'),
+    path('plants/delete/<int:plant_id>/', delete_plant, name='delete_plant'),
 ]
