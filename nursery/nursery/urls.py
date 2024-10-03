@@ -23,4 +23,5 @@ urlpatterns = [
     path('contact/',contact, name="contact"),
     path('nursery/',nursery,name="nursery"),
     path('admin/', admin.site.urls),
+    path('plants/add/', add_plant, name='add_plant'),
 ]
