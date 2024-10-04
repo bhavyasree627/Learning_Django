@@ -2,6 +2,9 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse
 from .models import *
 from django.contrib import messages 
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators  import login_required
 
 
 # Create your views here.
@@ -29,7 +32,7 @@ def nursery(request):
     return render(request,'nursery.html', context={"plants":plants})
 
 
-
+@login_required(login_url="/login/")
 def add_plant(request):
     if request.method == "POST":
         data = request.POST
@@ -60,13 +63,14 @@ def all_plants(request):
     plants = Plant.objects.all()
     return render(request, 'all_plants.html', {'plants': plants})
 
+@login_required(login_url="/login/")
 def delete_plant(request, plant_id):
     plant = get_object_or_404(Plant, id=plant_id)
     plant.delete()
     messages.success(request, "Plant deleted successfully!")
     return redirect('all_plants')
 
-
+@login_required(login_url="/login/")
 def update_plant(request, plant_id):
     plant = get_object_or_404(Plant, id=plant_id)
 
@@ -84,3 +88,52 @@ def update_plant(request, plant_id):
         return redirect('all_plants')
 
     return render(request, 'update_plant.html', {'plant': plant})
+
+# Login view
+def login_page(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        if not User.objects.filter(username=username).exists():
+            messages.error(request, "Invalid Username!")
+            return redirect('/login/')
+        
+        user = authenticate(username=username, password=password)
+        if not user:
+            messages.error(request, "Invalid Password!")
+            return redirect('/login/')
+        else:
+            login(request, user)
+            return redirect('/')
+    return render(request, "login.html")
+
+# Logout view
+def logout_page(request):
+    logout(request)
+    return redirect('/login/')
+
+# Register view
+def register_page(request):
+    if request.method == "POST":
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = User.objects.filter(username=username)
+        if user.exists():
+            messages.error(request, 'Username already exists! Please try another one.')
+            return redirect('/register/')
+        
+        user = User.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            username=username
+        )
+        user.set_password(password)  # hashing the password
+        user.save()
+        messages.success(request, "Account created successfully!")
+        return redirect('/login/')
+    
+    return render(request, "register.html")
