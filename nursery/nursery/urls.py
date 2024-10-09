@@ -29,6 +29,6 @@ urlpatterns = [
      path('plants/update/<int:plant_id>/',update_plant, name='update_plant'),
     path('plants/delete/<int:plant_id>/', delete_plant, name='delete_plant'),
     path('login/', login_page, name='login'),
-    path('logout/', logout_page, name='logout'),
+    path('logout/', home, name='home'),
     path('register/', register_page, name='register'),
 ]

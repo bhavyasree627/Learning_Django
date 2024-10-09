@@ -106,7 +106,7 @@ def login_page(request):
         else:
             login(request, user)
             return redirect('/')
-    return render(request, "login.html")
+    return render(request, "lo gin.html")
 
 # Logout view
 def logout_page(request):
